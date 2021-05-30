@@ -5,6 +5,7 @@ const middleware = require('../middlewares');
 const categorieRouter = express.Router();
 
 categorieRouter.route('/')
+  .get(middleware.validation.JWT, controller.categories.findAll)
   .post(middleware.validation.JWT, controller.categories.create);
 
 categorieRouter.use(middleware.error);
