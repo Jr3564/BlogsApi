@@ -17,11 +17,13 @@ module.exports = rescue(async (request, response, next) => {
   }
 
   const user = await User.findOne({ where: { email } })
-    .catch(({ message }) => console.log(`middleware.validation.user: ${message}`));
+    .catch(({ message }) => console.log(`controller.login: ${message}`));
 
-  if (user) {
-    const message = 'User already registered';
-    return response.status(statusCode.CONFLICT).send({ message });
-  } 
-    next();
+  if (!user || user.password !== password) {
+    response.status(statusCode.BAD_REQUEST).send({ message: 'Invalid fields' });
+  }
+  
+  request.user = user;
+
+  next();
 });
