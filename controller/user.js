@@ -11,4 +11,12 @@ const create = rescue(async (request, response) => {
   return response.status(statusCode.CREATED).send(user);
 });
 
-module.exports = { create };
+const findAll = rescue(async (request, response) => {
+  console.log('entrei');
+  const users = await User.findAll()
+    .catch((error) => console.log(`controller.user.findAll: ${error}`));
+
+  return response.status(statusCode.OK).send(users);
+});
+
+module.exports = { create, findAll };

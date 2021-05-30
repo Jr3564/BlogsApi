@@ -10,6 +10,12 @@ const jwtConfig = {
 
 const generateToken = (user) => jwt.sign({ data: user }, secret, jwtConfig);
 
-const decode = (token) => jwt.verify(token, secret);
+const defaultCallbackError = (err, decoded) => {
+  console.log(`service.validation.jwt: err: ${err} e decoded: ${decoded}`);
+};
 
-module.exports = { generateToken, decode };
+const verify = (token, callback = defaultCallbackError) => jwt.verify(token, secret, callback);
+
+const decode = (token) => jwt.decode(token, secret);
+
+module.exports = { generateToken, verify, decode };
