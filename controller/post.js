@@ -1,27 +1,31 @@
 const rescue = require('express-rescue');
 const { statusCode } = require('../utils');
-const { BlogPost, PostsCategorie } = require('../models');
+const { BlogPost, PostsCategorie, User, Categorie } = require('../models');
 
 const create = rescue(async (request, response) => {
   const { title, content, categoryIds } = request.body;
   const { id: userId } = request.user;
 
-  const creates = categoryIds.map((id) => (
-    PostsCategorie.create({ userId, id })
-  ));
+  const { dataValues: blogPost } = await BlogPost.create({ title, content, userId });
 
-  Promise.all(creates);
+  Promise.all(
+    categoryIds.map((categoryId) => (
+      PostsCategorie.create({ categoryId, postId: blogPost.id })
+    )),
+  );
 
-  const { dataValues } = await BlogPost.create({ title, content });
-
-  console.log({ ...dataValues, userId });
-  return response.status(statusCode.CREATED).send({ ...dataValues, userId });
+  return response.status(statusCode.CREATED).json({ ...blogPost, userId });
 });
 
-const findAll = rescue(async (request, response) => {
-  const blogPosts = await BlogPost.findAll();
+const findAll = rescue(async (_request, response) => {
+  const blogPosts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user' },
+      { model: Categorie, as: 'categories' },
+    ],
+  });
 
-  return response.status(statusCode.OK).send(blogPosts);
+  return response.status(statusCode.OK).send(JSON.stringify(blogPosts));
 });
 
 module.exports = { create, findAll };

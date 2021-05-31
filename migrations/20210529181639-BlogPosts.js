@@ -28,14 +28,6 @@ module.exports = {
           allowNull: false,
           type: Sequelize.DATE
         },
-/*         createAt: {
-          type: Sequelize.DATE,
-          field: 'published'
-        },
-        updatedAt: {
-          type: Sequelize.DATE,
-          field: 'updated'
-        }, */
       }
     );
     return PostsCategories;
