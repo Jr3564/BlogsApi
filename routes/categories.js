@@ -8,6 +8,6 @@ categorieRouter.route('/')
   .get(middleware.validation.JWT, controller.categories.findAll)
   .post(middleware.validation.JWT, controller.categories.create);
 
-categorieRouter.use(middleware.error);
+categorieRouter.use(middleware.error.badRequest);
 
 module.exports = categorieRouter;

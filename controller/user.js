@@ -4,7 +4,6 @@ const { User } = require('../models');
 
 const create = rescue(async (request, response) => {
   const { displayName, email, password, image } = request.body;
-
   const user = await User.create({ displayName, email, password, image });
 
   return response.status(statusCode.CREATED).send(user);

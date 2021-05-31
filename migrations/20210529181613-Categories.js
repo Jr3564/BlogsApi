@@ -11,8 +11,6 @@ module.exports = {
           primaryKey: true
         },
         name: Sequelize.DataTypes.STRING,
-        createdAt: Sequelize.DataTypes.DATE,
-        updatedAt: Sequelize.DataTypes.DATE
       }
     );
   },

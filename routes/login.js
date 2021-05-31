@@ -7,6 +7,6 @@ const loginRouter = express.Router();
 loginRouter.route('/')
   .post(middleware.validation.login, controller.login);
 
-loginRouter.use(middleware.error);
+loginRouter.use(middleware.error.badRequest);
 
 module.exports = loginRouter;

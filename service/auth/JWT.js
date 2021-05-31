@@ -12,6 +12,7 @@ const generateToken = (user) => jwt.sign({ data: user }, secret, jwtConfig);
 
 const defaultCallbackError = (err, decoded) => {
   console.log(`service.validation.jwt: err: ${err} e decoded: ${decoded}`);
+  return decoded.data;
 };
 
 const verify = (token, callback = defaultCallbackError) => jwt.verify(token, secret, callback);

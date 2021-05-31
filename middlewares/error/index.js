@@ -1,4 +1,3 @@
-const { statusCode } = require('../../utils');
+const badRequest = require('./badRequest');
 
-module.exports = ({ message }, _req, response, _next) => response.status(statusCode.BAD_REQUEST)
-.json({ message });
+module.exports = { badRequest };

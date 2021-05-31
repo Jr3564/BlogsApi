@@ -8,8 +8,9 @@ module.exports = rescue(async (request, response, next) => {
   try {
     if (!token) throw new Error('Token not found');
   
-    await service.JWT.verify(token, (err) => {
+    request.user = await service.JWT.verify(token, (err, decoded) => {
       if (err) { throw new Error('Expired or invalid token'); }
+      return decoded.data;
     });
   } catch ({ message }) {
     return response.status(statusCode.UNAUTHORIZED).send({ message });

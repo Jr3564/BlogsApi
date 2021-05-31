@@ -2,15 +2,15 @@ const express = require('express');
 const controller = require('../controller');
 const middleware = require('../middlewares');
 
-const loginRouter = express.Router();
+const userRouter = express.Router();
 
-loginRouter.route('/')
+userRouter.route('/')
   .get(middleware.validation.JWT, controller.user.findAll)
   .post(middleware.validation.user, controller.user.create);
 
-loginRouter.route('/:id')
+userRouter.route('/:id')
   .get(middleware.validation.JWT, controller.user.findById);
 
-loginRouter.use(middleware.error);
+userRouter.use(middleware.error.badRequest);
 
-module.exports = loginRouter;
+module.exports = userRouter;
