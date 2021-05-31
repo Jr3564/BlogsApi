@@ -8,6 +8,9 @@ postRouter.route('/')
   .get(middleware.validation.JWT, controller.post.findAll)
   .post(middleware.validation.JWT, middleware.validation.post, controller.post.create);
 
+postRouter.route('/:id')
+  .get(middleware.validation.JWT, controller.post.findById);
+
 postRouter.use(middleware.error.badRequest);
 
 module.exports = postRouter;

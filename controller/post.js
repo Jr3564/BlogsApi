@@ -28,4 +28,20 @@ const findAll = rescue(async (_request, response) => {
   return response.status(statusCode.OK).send(JSON.stringify(blogPosts));
 });
 
-module.exports = { create, findAll };
+const findById = rescue(async (request, response) => {
+  const { id } = request.params;
+  const blogPosts = await BlogPost.findByPk(id, {
+    include: [
+      { model: User, as: 'user' },
+      { model: Categorie, as: 'categories' },
+    ],
+  });
+
+  if (!blogPosts) {
+    return response.status(statusCode.NOT_FOUND).send({ message: 'Post does not exist' });
+  }
+  console.log(blogPosts);
+  return response.status(statusCode.OK).send(JSON.stringify(blogPosts));
+});
+
+module.exports = { create, findAll, findById };
