@@ -11,6 +11,9 @@ userRouter.route('/')
 userRouter.route('/:id')
   .get(middleware.validation.JWT, controller.user.findById);
 
+userRouter.route('/me')
+  .delete(middleware.validation.JWT, controller.user.exclude);
+
 userRouter.use(middleware.error.badRequest);
 
 module.exports = userRouter;

@@ -27,4 +27,12 @@ const findById = rescue(async (request, response) => {
     return response.status(statusCode.OK).send(user);
 });
 
-module.exports = { create, findAll, findById };
+const exclude = rescue(async (request, response) => {
+  const { id } = request.user;
+
+  await User.destroy({ where: { id } });
+
+  return response.status(statusCode.NO_CONTENT).send();
+});
+
+module.exports = { create, findAll, findById, exclude };

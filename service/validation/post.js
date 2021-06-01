@@ -17,4 +17,7 @@ module.exports = {
       throw new Error(message);
     }
   },
+  notEditCategoryId: (categoryIds) => {
+    if (categoryIds) throw new Error('Categories cannot be edited');
+  },
 };

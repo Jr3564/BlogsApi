@@ -30,6 +30,7 @@ const findAll = rescue(async (_request, response) => {
 
 const findById = rescue(async (request, response) => {
   const { id } = request.params;
+
   const blogPosts = await BlogPost.findByPk(id, {
     include: [
       { model: User, as: 'user' },
@@ -40,8 +41,42 @@ const findById = rescue(async (request, response) => {
   if (!blogPosts) {
     return response.status(statusCode.NOT_FOUND).send({ message: 'Post does not exist' });
   }
-  console.log(blogPosts);
+
   return response.status(statusCode.OK).send(JSON.stringify(blogPosts));
 });
 
-module.exports = { create, findAll, findById };
+const update = rescue(async (request, response) => {
+  const { title, content } = request.body;
+  const { id } = request.params;
+
+  await BlogPost.update(
+    { title, content },
+    { where: { id } },
+    { returning: true },
+  );
+
+  const blogPost = await BlogPost.findByPk(id, {
+    include: [
+      { model: User, as: 'user' },
+      { model: Categorie, as: 'categories' },
+    ],
+  });
+
+  return response.status(statusCode.OK).send(blogPost);
+});
+
+const exclude = rescue(async (request, response) => {
+  const { id } = request.params;
+
+  const exist = await BlogPost.findByPk(id);
+
+  if (!exist) {
+    return response.status(statusCode.NOT_FOUND).send({ message: 'Post does not exist' });
+  }
+
+  await BlogPost.destroy({ where: { id } });
+
+  return response.status(statusCode.NO_CONTENT).send();
+});
+
+module.exports = { create, findAll, findById, update, exclude };
