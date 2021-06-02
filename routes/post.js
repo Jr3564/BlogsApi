@@ -8,6 +8,9 @@ postRouter.route('/')
   .get(middleware.validation.JWT, controller.post.findAll)
   .post(middleware.validation.JWT, middleware.validation.post, controller.post.create);
 
+postRouter.route('/search')
+  .get(middleware.validation.JWT, controller.post.search);
+
 postRouter.route('/:id')
   .get(middleware.validation.JWT, controller.post.findById)
   .delete(middleware.validation.JWT, middleware.validation.userAuth, controller.post.exclude)
@@ -16,7 +19,7 @@ postRouter.route('/:id')
     middleware.validation.userAuth,
     middleware.validation.updatePost,
     controller.post.update,
-    );
+  );
 
 postRouter.use(middleware.error.badRequest);
 

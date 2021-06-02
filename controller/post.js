@@ -1,6 +1,7 @@
 const rescue = require('express-rescue');
 const { statusCode } = require('../utils');
 const { BlogPost, PostsCategorie, User, Categorie } = require('../models');
+const service = require('../service');
 
 const create = rescue(async (request, response) => {
   const { title, content, categoryIds } = request.body;
@@ -79,4 +80,10 @@ const exclude = rescue(async (request, response) => {
   return response.status(statusCode.NO_CONTENT).send();
 });
 
-module.exports = { create, findAll, findById, update, exclude };
+const search = rescue(async (request, response) => {
+  const blogPosts = await service.post.search(request.query.q);
+
+  return response.status(statusCode.OK).send(JSON.stringify(blogPosts));
+});
+
+module.exports = { create, findAll, findById, update, exclude, search };
